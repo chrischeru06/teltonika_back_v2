@@ -1,0 +1,6 @@
+{
+   "app.validationFailed": "Data validation failed",
+   "auth_riders.controller.required": "This field is required",
+   "auth_riders.controller.invalidPhoneNumber": "Invalid phone number",
+   "auth_riders.controller.invalidEmail": "Invalid email address"
+}

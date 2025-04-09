@@ -1,0 +1,197 @@
+
+<style>
+  .container {
+       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+       font-size: 14px;
+       font-weight: 400;
+       color: #262b33;
+       background-color: #f3f3f3;
+       padding: 10px 0;
+       width: 100%;
+  }
+  .content {
+       background-color: #fff;
+       border-radius: 8px;
+       max-width: 600px;
+       width: 100%;
+       margin: auto;
+  }
+
+  table {
+       margin: 32px auto 48px;
+  }
+
+  h1 {
+       font-size: 24px;
+       font-weight: bold;
+       line-height: 30px;
+       margin-top: 0;
+       margin-bottom: 20px;
+       padding: 0 10px;
+  }
+
+
+  p {
+       font-weight: 400;
+       margin-bottom: 16px;
+       line-height: 1.3;
+       padding: 0 10px;
+  }
+  a {
+       text-decoration: none;
+       color: inherit;
+  }
+
+  .code {
+       font-size: 45px;
+       text-align: center;
+       letter-spacing: 10px;
+       margin-bottom: revert;
+  }
+
+  .medias {
+       max-width: 360px;
+       margin: auto;
+       margin-top: 20px;
+       text-align: center;
+  }
+
+  .medias a {
+       color: #777;
+       margin: 0 10px;
+  }
+
+  .footer-links {
+       text-align: center;
+       max-width: 450px;
+       margin: auto;
+       color: #999999;
+       margin-top: 20px;
+  }
+
+  .footer-links .separator {
+       margin: 0 10px;
+  }
+
+  .footer-links a {
+       color: #999999;
+       font-size: 11px;
+  }
+
+  .wasili-slogan {
+       font-size: 15px;
+       color: #999999;
+       text-align: center;
+       width: 80%;
+       max-width: 300px;
+       margin: 20px auto;
+  }
+
+  .address {
+       font-size: 13px;
+       color: #999999;
+       text-align: center;
+       margin-top: 20px;
+  }
+
+  .app_header {
+       display: block;
+       text-align: center;
+  }
+
+  img.image_header {
+       width: 100%;
+       object-fit: contain;
+       max-height: 115px;
+       border-top-right-radius: 10px;
+  }
+</style>
+
+<table class="container">
+  <tr>
+       <td class="center" width="100%">
+            <table class="content">
+                 <tbody>
+                      <tr>
+                           <td>
+                                <a href="https://wasiliburundi.bi/" class="app_header">
+                                     <img class="image_header" src="<%= baseUrl ? baseUrl : "https://prodev.mediabox.bi:1058" %>/images/entete.png" alt="">
+                                </a>
+                           </td>
+                      </tr>
+                      <tr>
+                           <td>
+                                <h1>
+                                  <%= __('auth_riders.controller.getDataCompteoublier.title') %>
+                                </h1>
+                           </td>
+                      </tr>
+                      <tr>
+                           <td>
+                                <p>
+                                  <%= __('auth_riders.controller.getDataCompteoublier.réinitialisation') %>
+                                </p>
+                                <p>
+                                  <%= __('auth_riders.controller.getDataCompteoublier.codeReinitier') %>
+                                </p>
+                                <p class="code">
+                                     <%= code %>
+                                </p>
+                                <p>
+                                  <%= __('auth_riders.controller.getDataCompteoublier.processApplication') %>
+                                </p>
+                                <p><%= __('auth_riders.controller.getDataCompteoublier.inchange') %></p>
+                                     <p>
+                                      <%= __('auth_riders.controller.getDataCompteoublier.Cordialement') %><br>
+                                     </p>
+                           </td>
+                      </tr>
+                      <tr>
+                           <td>
+                                <p class="wasili-slogan">
+                                  <%= __('auth_riders.controller.getDataCompteoublier.automatique') %>
+                                </p>
+                                <p class="footer-links">
+                                     <a href="https://wa.me/25775136136 ">
+                                      <%= __('auth_riders.controller.getDataCompteoublier.conditions') %>
+                                     </a>
+                                     <span class="separator">•</span>
+                                     <!-- <a href="https://wa.me/25775136136 "><%= __('auth_riders.controller.getDataCompteoublier.Politiques') %></a>
+                                               • -->
+                                     <a href="https://wasiliburundi.bi/">
+                                      <%= __('auth_riders.controller.getDataCompteoublier.Visiter') %>
+                                     </a>
+                                     <span class="separator">•</span>
+                                     <a href="https://wa.me/25775136136 ">
+                                      <%= __('auth_riders.controller.getDataCompteoublier.Aide') %>
+                                     </a>
+                                </p>
+                                <p class="medias">
+                                     <a href="https://twitter.com/wasili_burundi" class="media">
+                                          <img src="<%= baseUrl ? baseUrl : "https://prodev.mediabox.bi:1058" %>/images/twitter.png" alt="twitter" border="0">
+                                     </a>
+                                     <a href="https://www.facebook.com/wasiliburundi" class="media">
+                                          <img src="<%= baseUrl ? baseUrl : "https://prodev.mediabox.bi:1058" %>/images/facebook.png" alt="facebook" border="0">
+                                     </a>
+                                     <a href="https://www.instagram.com/wasiliburundi/" class="media">
+                                          <img src="<%= baseUrl ? baseUrl : "https://prodev.mediabox.bi:1058" %>/images/instagram.png" alt="instagram" border="0">
+                                     </a>
+                                     <a href="https://wa.me/25775136136 " class="media">
+                                          <img src="<%= baseUrl ? baseUrl : "https://prodev.mediabox.bi:1058" %>/images/whatsapp.png" alt="whatsapp" border="0">
+                                     </a>
+                                </p>
+                                <a href="https://maps.app.goo.gl/GpMPtc4emVaYXQFd7">
+                                     <p class="address">
+                                          Wasili burundi, <br>
+                                          64 Bouvelvard Mwezi Gisabo <br>
+                                          Q. Kiriri, Bujumbura Burundi
+                                     </p>
+                                </a>
+                           </td>
+                      </tr>
+                      </footer>
+                 </tbody>
+            </table>
+       </td>
+  </tr>
+</table>

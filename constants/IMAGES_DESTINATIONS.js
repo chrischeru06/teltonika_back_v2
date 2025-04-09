@@ -1,0 +1,24 @@
+const path = require('path')
+const { parseArgs } = require('util')
+
+
+const IMAGES_DESTINATIONS = {
+          drivers: path.sep + 'uploads' + path.sep + 'images' + path.sep + 'drivers',
+          riders: path.sep + 'uploads' + path.sep + 'images' + path.sep + 'riders',
+          cars: path.sep + 'uploads' + path.sep + 'images' + path.sep + 'cars',
+          corporates: path.sep + 'uploads' + path.sep + 'images' + path.sep + 'corporates',
+          Utilisateur: path.sep + 'uploads' + path.sep + 'images' + path.sep + 'utilisateurs',
+          vehicule:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehicules',
+          publicite:path.sep +'uploads' + path.sep + 'images' + path.sep + 'publicite',
+          VehiculeMarque:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehiculeMarques',
+          VehiculeModele:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehiculeModeles',
+          VehiculeModele:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehiculeModeles',
+          Proprietairepassport:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairepassport',
+          Proprietairelogo:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairelogo',
+          Proprietairefilecni:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairefilecni',
+          Proprietairefilenif:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairefilenif',
+          Proprietairefilerc:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairefilerc',
+          assureur:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'assureur',
+}
+
+module.exports = IMAGES_DESTINATIONS

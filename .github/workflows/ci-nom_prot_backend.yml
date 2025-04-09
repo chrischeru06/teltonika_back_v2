@@ -1,0 +1,111 @@
+name: nom_projet_backend-BACKEND
+
+on:
+   workflow_dispatch:
+   push:
+      branches:
+         - main
+         - develop
+   pull_request:
+      branches:
+         - main
+
+jobs:
+   # Déploiement de la version dev
+   build_deploy_dev:
+      runs-on: ubuntu-20.04
+      if: github.ref == 'refs/heads/develop'
+      steps:
+         - name: Checkout code
+           uses: actions/checkout@v4
+           with:
+              fetch-depth: 0
+              ref: "develop"
+
+         - name: Set up Node.js 18.x
+           uses: actions/setup-node@v3
+           with:
+              node-version: 18.x
+
+         - name: Install dependencies
+           run: npm install
+
+         - name: Run tests
+           run: npm run test
+
+         - name: SonarQube Scan
+           uses: sonarsource/sonarqube-scan-action@v3
+           env:
+              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+         # Si vous souhaitez faire échouer le job si la Quality Gate est rouge, décommentez
+         # les lignes suivantes. Cela est généralement utilisé pour faire échouer un déploiement.
+         # - name: SonarQube Quality Gate
+         #   uses: sonarsource/sonarqube-quality-gate-action@master
+         #   timeout-minutes: 5
+         #   env:
+         #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+         - name: Deploy to develop environment
+           uses: appleboy/ssh-action@v1.0.3
+           with:
+              host: ${{ secrets.HOST_DEV }}
+              username: ${{ secrets.USERNAME_DEV }}
+              key: ${{ secrets.KEY_DEV }}
+              passphrase: ${{ secrets.PASSPHRASE_DEV }}
+              port: ${{ secrets.PORT_DEV }}
+              script: |
+                 cd ${{ secrets.REMOTE_PATH }} &&
+                 git pull origin develop &&
+                 source ~/.nvm/nvm.sh &&
+                 npm install
+
+   # Déploiement de la version prod
+   build_deploy_prod:
+      runs-on: ubuntu-20.04
+      if: github.ref == 'refs/heads/main'
+      steps:
+         - name: Checkout code
+           uses: actions/checkout@v4
+           with:
+              ref: "main"
+
+         - name: Set up Node.js 18.x
+           uses: actions/setup-node@v3
+           with:
+              node-version: 18.x
+
+         - name: Install dependencies
+           run: npm install
+
+         - name: Run tests
+           run: npm run test
+
+         - name: SonarQube Scan
+           uses: sonarsource/sonarqube-scan-action@v3
+           env:
+              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+         # Si vous ne souhaitez pas faire échouer le job si la Quality Gate est rouge, commentez
+         # les lignes suivantes. Cela est généralement utilisé pour faire échouer un déploiement.
+         - name: SonarQube Quality Gate
+           uses: sonarsource/sonarqube-quality-gate-action@master
+           timeout-minutes: 5
+           env:
+              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+         - name: Deploy to production environment
+           uses: appleboy/ssh-action@v1.0.3
+           with:
+              host: ${{ secrets.HOST_PROD }}
+              username: ${{ secrets.USERNAME_PROD }}
+              key: ${{ secrets.KEY_PROD }}
+              passphrase: ${{ secrets.PASSPHRASE_PROD }}
+              port: ${{ secrets.PORT_PROD }}
+              script: |
+                 cd ${{ secrets.REMOTE_PATH_PROD }} &&
+                 git pull origin main &&
+                 source ~/.nvm/nvm.sh &&
+                 npm install

@@ -1,4 +1,4 @@
-name: nom_projet_backend-BACKEND
+name: wasili_trucking_back_v4
 
 on:
    workflow_dispatch:

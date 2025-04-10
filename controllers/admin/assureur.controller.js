@@ -7,6 +7,8 @@ const marque = require("../../models/admin/Marque")
 const Assureur = require("../../models/admin/Assureur")
 const Assureurpload = require("../../class/uploads/AssureurUpload")
 const IMAGES_DESTINATIONS = require("../../constants/IMAGES_DESTINATIONS")
+const Vehicules = require("../../models/admin/Vehicules")
+const model_vehicule = require("../../models/admin/Model")
 
 /**
  * Lister tous les demandes des courses
@@ -84,12 +86,49 @@ const findAll = async (req, res) => {
                 ...globalSearchWhereLike,
             },
         })
+         const driverIds = result.rows.map((e) => e.toJSON().ID_ASSUREUR);
+                const vehicule = await Vehicules.findAll({
+                    include: [
+                        {
+                            model: marque,
+                            as: 'marques'
+                        },
+                        {
+                            model: model_vehicule,
+                            as: 'modele'
+                        },
+        
+                    ],
+                    where: {
+                        [Op.and]: {
+                            ID_ASSUREUR: {
+                                [Op.in]: driverIds,
+                            },
+                        },
+                    },
+                });
+        
+                const resultss = await Promise.all(
+                    result.rows.map((driverObject) => {
+                        const proprietaire = driverObject.toJSON();
+                        const vehiculnombre = vehicule.filter(
+                            (allC) => proprietaire.ID_ASSUREUR == allC.ID_ASSUREUR
+                        );
+                        // const controle= nombrecontrole.filter(allC => agent.PSR_AFFECTATION_ID == allC.PSR_AFFECTATION_ID)
+                        return {
+                            ...proprietaire,
+                            vehiculnombre,
+                            // controle,
+                        };
+                    })
+                );
+        
         res.status(RESPONSE_CODES.OK).json({
             statusCode: RESPONSE_CODES.OK,
             httpStatus: RESPONSE_STATUS.OK,
             message: "Liste des modeles des voitures",
             result: {
-                data: result.rows,
+                data: resultss,
                 // totalRecords: result.count
                 totalRecords: result.rows.length,
             }

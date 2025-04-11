@@ -14,6 +14,7 @@ const Syst_collines = require("../../models/admin/Syst_colline")
 const Syst_provinces = require("../../models/admin/Syst_province")
 const Syst_communes = require("../../models/admin/Syst_commune")
 const ProprietaireUpload = require("../../class/uploads/ProprietaireUplaod")
+const Zone_affectation = require("../../models/admin/Zone_affectation_chauffeur")
 
 /**
  * Lister tous les demandes des courses
@@ -484,9 +485,219 @@ const deleteItems = async (req, res) => {
         });
     }
 };
+
+const findAllbyid = async (req, res) => {
+    try {
+        const{CHAUFFEUR_ID}=req.params
+        const { rows = 10, first = 0, sortField, sortOrder, search } = req.query
+        const defaultSortField = "CHAUFFEUR_ID"
+        const defaultSortDirection = "DESC"
+        const sortColumns = {
+            chauffeur_info: {
+                as: "chauffeur_info",
+                fields: {
+                    CHAUFFEUR_ID: "CHAUFFEUR_ID",
+                }
+            }
+        }
+        let orderColumn, orderDirection
+        // sorting
+        let sortModel
+        if (sortField) {
+            for (let key in sortColumns) {
+                if (sortColumns[key].fields.hasOwnProperty(sortField)) {
+                    sortModel = {
+                        model: key,
+                        as: sortColumns[key].as
+                    }
+                    orderColumn = sortColumns[key].fields[sortField]
+                    break
+                }
+            }
+        }
+        if (!orderColumn || !sortModel) {
+            orderColumn = sortColumns.chauffeur_info.fields.CHAUFFEUR_ID
+            sortModel = {
+                model: 'chauffeur_info',
+                as: sortColumns.chauffeur_info
+            }
+        }
+        // ordering
+        if (sortOrder == 1) {
+            orderDirection = 'ASC'
+        } else if (sortOrder == -1) {
+            orderDirection = 'DESC'
+        } else {
+            orderDirection = defaultSortDirection
+        }
+
+        // searching
+        const globalSearchColumns = [
+            ''
+        ]
+        let globalSearchWhereLike = {}
+        if (search && search.trim() != "") {
+            const searchWildCard = {}
+            globalSearchColumns.forEach(column => {
+                searchWildCard[column] = {
+                    [Op.substring]: search
+                }
+            })
+            globalSearchWhereLike = {
+                [Op.or]: searchWildCard
+            }
+        }
+        const result = await chauffeur.findAndCountAll({
+            limit: parseInt(rows),
+            offset: parseInt(first),
+            order: [
+                [sortModel, orderColumn, orderDirection]
+            ],
+            include: [
+                {
+                    model: Syst_communes,
+                    as: 'communeproprio',
+                    attributes: ['COMMUNE_ID', 'COMMUNE_NAME'],
+                },
+                {
+                    model: Syst_provinces,
+                    as: 'provinceproprio'
+                },
+                {
+                    model: Syst_collines,
+                    as: 'collineproprio',
+                    attributes: ['COLLINE_ID', 'COLLINE_NAME']
+                },
+                {
+                    model: Syst_zones,
+                    as: 'zoneeproprio',
+                    attributes: ['ZONE_ID', 'ZONE_NAME']
+                },
+            ],
+
+            where: {
+                CHAUFFEUR_ID:CHAUFFEUR_ID,
+                ...globalSearchWhereLike,
+            },
+        })
+
+        res.status(RESPONSE_CODES.OK).json({
+            statusCode: RESPONSE_CODES.OK,
+            httpStatus: RESPONSE_STATUS.OK,
+            message: "Liste des chauffeures",
+            result: {
+                data: result.rows,
+                // totalRecords: result.count
+                totalRecords: result.rows.length,
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
+            statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
+            httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
+            message: "Erreur interne du serveur, réessayer plus tard",
+        })
+    }
+};
+
+const findAllzone = async (req, res) => {
+    try {
+        const{CHAUFFEUR_ID}=req.params
+        const { rows = 10, first = 0, sortField, sortOrder, search } = req.query
+        const defaultSortField = "CHAUFFEUR_ID"
+        const defaultSortDirection = "DESC"
+        const sortColumns = {
+            chauffeur_info: {
+                as: "chauffeur_info",
+                fields: {
+                    CHAUFFEUR_ID: "CHAUFFEUR_ID",
+                }
+            }
+        }
+        let orderColumn, orderDirection
+        // sorting
+        let sortModel
+        if (sortField) {
+            for (let key in sortColumns) {
+                if (sortColumns[key].fields.hasOwnProperty(sortField)) {
+                    sortModel = {
+                        model: key,
+                        as: sortColumns[key].as
+                    }
+                    orderColumn = sortColumns[key].fields[sortField]
+                    break
+                }
+            }
+        }
+        if (!orderColumn || !sortModel) {
+            orderColumn = sortColumns.chauffeur_info.fields.CHAUFFEUR_ID
+            sortModel = {
+                model: 'chauffeur_info',
+                as: sortColumns.chauffeur_info
+            }
+        }
+        // ordering
+        if (sortOrder == 1) {
+            orderDirection = 'ASC'
+        } else if (sortOrder == -1) {
+            orderDirection = 'DESC'
+        } else {
+            orderDirection = defaultSortDirection
+        }
+
+        // searching
+        const globalSearchColumns = [
+            ''
+        ]
+        let globalSearchWhereLike = {}
+        if (search && search.trim() != "") {
+            const searchWildCard = {}
+            globalSearchColumns.forEach(column => {
+                searchWildCard[column] = {
+                    [Op.substring]: search
+                }
+            })
+            globalSearchWhereLike = {
+                [Op.or]: searchWildCard
+            }
+        }
+        const result = await Zone_affectation.findAndCountAll({
+            limit: parseInt(rows),
+            offset: parseInt(first),
+            order: [
+                [sortModel, orderColumn, orderDirection]
+            ],
+            where: {
+                CHAUFFEUR_ID:CHAUFFEUR_ID,
+                ...globalSearchWhereLike,
+            },
+        })
+
+        res.status(RESPONSE_CODES.OK).json({
+            statusCode: RESPONSE_CODES.OK,
+            httpStatus: RESPONSE_STATUS.OK,
+            message: "Liste des chauffeures",
+            result: {
+                data: result.rows,
+                // totalRecords: result.count
+                totalRecords: result.rows.length,
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
+            statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
+            httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
+            message: "Erreur interne du serveur, réessayer plus tard",
+        })
+    }
+};
 module.exports = {
     findAll,
     create_chauffeur,
     update_assureur,
-    deleteItems
+    deleteItems,
+    findAllbyid,
+    findAllzone
 }

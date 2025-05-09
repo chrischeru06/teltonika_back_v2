@@ -71,7 +71,7 @@ buck-out/
 .expo/
 web-build/
 dist/
-
+.env
 # @end expo-cli
 tracking_files
 public/uploads

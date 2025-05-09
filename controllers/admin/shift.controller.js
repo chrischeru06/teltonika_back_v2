@@ -1,9 +1,8 @@
 const express = require("express")
 const RESPONSE_CODES = require("../../constants/RESPONSE_CODES")
 const RESPONSE_STATUS = require("../../constants/RESPONSE_STATUS")
-const { Op, where } = require("sequelize")
+const { Op} = require("sequelize")
 const Validation = require("../../class/Validation")
-const marque = require("../../models/admin/Marque")
 const shift_vehicule = require("../../models/admin/Shift")
 
 /**
@@ -15,7 +14,6 @@ const shift_vehicule = require("../../models/admin/Shift")
 const findAll = async (req, res) => {
     try {
         const { rows = 10, first = 0, sortField, sortOrder, search } = req.query
-        const defaultSortField = "SHIFT_ID"
         const defaultSortDirection = "DESC"
         const sortColumns = {
             shift_model: {

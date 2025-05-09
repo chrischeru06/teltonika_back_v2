@@ -1,8 +1,7 @@
 const express = require("express")
 const RESPONSE_CODES = require("../../constants/RESPONSE_CODES")
 const RESPONSE_STATUS = require("../../constants/RESPONSE_STATUS")
-const { Op, where } = require("sequelize")
-const Validation = require("../../class/Validation")
+const { Op } = require("sequelize")
 const Syst_collines = require("../../models/admin/Syst_colline")
 /**
  * Lister tous les demandes des courses
@@ -14,7 +13,6 @@ const findAll = async (req, res) => {
     try {
         const {ZONE_ID}= req.params
         const { rows = 1000, first = 0, sortField, sortOrder, search } = req.query
-        const defaultSortField = "COLLINE_ID"
         const defaultSortDirection = "DESC"
         const sortColumns = {
             colline_info: {

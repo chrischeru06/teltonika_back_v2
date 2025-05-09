@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const {DataTypes } = require("sequelize");
 const sequelize = require("../../utils/sequerize");
 
 
@@ -17,14 +17,6 @@ const Syst_provinces = sequelize.define(
     },
     OBJECTIF: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    PROVINCE_LATITUDE: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    PROVINCE_LATITUDE: {
-      type: DataTypes.FLOAT,
       allowNull: false,
     },
     PROVINCE_LONGITUDE: {

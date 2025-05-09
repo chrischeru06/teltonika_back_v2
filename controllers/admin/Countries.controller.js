@@ -1,8 +1,7 @@
 const express = require("express")
 const RESPONSE_CODES = require("../../constants/RESPONSE_CODES")
 const RESPONSE_STATUS = require("../../constants/RESPONSE_STATUS")
-const { Op, where } = require("sequelize")
-const Validation = require("../../class/Validation")
+const { Op} = require("sequelize")
 const Countries = require("../../models/admin/Countries")
 /**
  * Lister tous les demandes des courses
@@ -13,7 +12,6 @@ const Countries = require("../../models/admin/Countries")
 const findAll = async (req, res) => {
     try {
         const { rows = 10000, first = 0, sortField, sortOrder, search } = req.query
-        const defaultSortField = "COUNTRY_ID"
         const defaultSortDirection = "DESC"
         const sortColumns = {
             countries_info: {

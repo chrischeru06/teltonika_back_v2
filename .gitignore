@@ -73,5 +73,5 @@ web-build/
 dist/
 
 # @end expo-cli
-
+tracking_files
 public/uploads

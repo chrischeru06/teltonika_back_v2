@@ -15,6 +15,11 @@ const countries_routes = require('./countries.routes');
 const vehicule_routes = require('./vehicule.routes');
 const chauffeur_routes = require('./chauffeur.routes');
 const zonesdelimitation_routes = require('./zone_affect.routes');
+const auth_routes = require('./auth.routes');
+const user_routes = require('./user.routes');
+const profil_routes = require('./profil.routes');
+const tracking_routes = require('./tracking.routes');
+const operateur_resau_routes = require('./operateur_resau.routes');
 const adminRouter = express.Router();
 
 adminRouter.use('/assureur', assureur_routes)
@@ -33,6 +38,11 @@ adminRouter.use('/countries', countries_routes)
 adminRouter.use('/vehicule', vehicule_routes)
 adminRouter.use('/chauffeur', chauffeur_routes)
 adminRouter.use('/zonedelimitation', zonesdelimitation_routes)
+adminRouter.use('/auth', auth_routes)
+adminRouter.use('/utilisateur', user_routes)
+adminRouter.use('/profil', profil_routes)
+adminRouter.use('/tracking', tracking_routes)
+adminRouter.use('/operateur', operateur_resau_routes)
 
 module.exports = adminRouter
 

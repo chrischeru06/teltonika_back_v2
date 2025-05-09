@@ -1,7 +1,7 @@
 const express = require("express")
 const RESPONSE_CODES = require("../../constants/RESPONSE_CODES")
 const RESPONSE_STATUS = require("../../constants/RESPONSE_STATUS")
-const { Op, where } = require("sequelize")
+const { Op} = require("sequelize")
 const Validation = require("../../class/Validation")
 const Zone_affectation = require("../../models/admin/Zone_affectation_chauffeur")
 const Vehicules = require("../../models/admin/Vehicules")
@@ -15,9 +15,8 @@ const model_vehicule = require("../../models/admin/Model")
  */
 const findAll = async (req, res) => {
     try {
-        const {CHAUFF_ZONE_AFFECTATION_ID}= req.params
+        
         const { rows = 1000, first = 0, sortField, sortOrder, search } = req.query
-        const defaultSortField = "CHAUFF_ZONE_AFFECTATION_ID"
         const defaultSortDirection = "DESC"
         const sortColumns = {
             zone_info: {

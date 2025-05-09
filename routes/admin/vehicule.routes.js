@@ -6,6 +6,8 @@ vehicule_routes.get("/", vehicule_controller.findAll)
 vehicule_routes.post("/delete", vehicule_controller.deleteItems)
 vehicule_routes.post("/create", vehicule_controller.createVehicule)
 vehicule_routes.put("/update/:VEHICULE_ID", vehicule_controller.updateVehicule)
+vehicule_routes.put("/change_status/:VEHICULE_ID", vehicule_controller.change_status)
 vehicule_routes.get("/byid/:VEHICULE_ID", vehicule_controller.findAllbyid)
+vehicule_routes.get("/bycode/:CODE", vehicule_controller.findAllcode)
 
 module.exports = vehicule_routes

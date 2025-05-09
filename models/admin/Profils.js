@@ -1,30 +1,32 @@
 const {DataTypes } = require("sequelize");
 const sequelize = require("../../utils/sequerize");
-const shift_vehicule = sequelize.define(
-  "shift",
+const profiles = sequelize.define(
+  "profil",
   {
-    SHIFT_ID: {
+    PROFIL_ID: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-    HEURE_DEBUT : {
-        type: DataTypes.STRING(10),
+    DESCRIPTION_PROFIL : {
+        type: DataTypes.STRING(150),
         allowNull: false,
       },
-    HEURE_FIN : {
-        type: DataTypes.STRING(10),
+      CODE_PROFIL: {
+        type: DataTypes.STRING(50),
         allowNull: false,
       },
-    
+      ROLE: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
   },
   {
     freezeTableName: true,
-    tableName: "shift",
+    tableName: "profil",
     timestamps: false,
   }
 );
 
-
-module.exports = shift_vehicule;
+module.exports = profiles;

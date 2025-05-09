@@ -1,7 +1,7 @@
 const express = require("express")
 const RESPONSE_CODES = require("../../constants/RESPONSE_CODES")
 const RESPONSE_STATUS = require("../../constants/RESPONSE_STATUS")
-const { Op, where } = require("sequelize")
+const { Op} = require("sequelize")
 const Validation = require("../../class/Validation")
 const marque = require("../../models/admin/Marque")
 const model_vehicule = require("../../models/admin/Model")
@@ -15,7 +15,6 @@ const model_vehicule = require("../../models/admin/Model")
 const findAll = async (req, res) => {
     try {
         const { rows = 10, first = 0, sortField, sortOrder, search } = req.query
-        const defaultSortField = "ID_MODELE"
         const defaultSortDirection = "DESC"
         const sortColumns = {
             vehicule_model: {
@@ -112,7 +111,6 @@ const findAllbyid = async (req, res) => {
     try {
         const{ID_MARQUE}=req.params
         const { rows = 10, first = 0, sortField, sortOrder, search } = req.query
-        const defaultSortField = "ID_MODELE"
         const defaultSortDirection = "DESC"
         const sortColumns = {
             vehicule_model: {

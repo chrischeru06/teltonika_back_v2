@@ -1,11 +1,9 @@
 const express = require("express")
 const RESPONSE_CODES = require("../../constants/RESPONSE_CODES")
 const RESPONSE_STATUS = require("../../constants/RESPONSE_STATUS")
-const { Op, where } = require("sequelize")
+const { Op} = require("sequelize")
 const Validation = require("../../class/Validation")
 const Type_proprietaire = require("../../models/admin/Type_proprietaire")
-
-
 /**
  * Lister tous les demandes des Type_proprietaires
  * @param {express.Request} req 
@@ -15,7 +13,6 @@ const Type_proprietaire = require("../../models/admin/Type_proprietaire")
 const findAll = async (req, res) => {
     try {
         const { rows = 10, first = 0, sortField, sortOrder, search } = req.query
-        const defaultSortField = "TYPE_PROPRIETAIRE_ID"
         const defaultSortDirection = "DESC"
         const sortColumns = {
             type_proprietaire: {

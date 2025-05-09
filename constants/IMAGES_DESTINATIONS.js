@@ -1,7 +1,4 @@
 const path = require('path')
-const { parseArgs } = require('util')
-
-
 const IMAGES_DESTINATIONS = {
           drivers: path.sep + 'uploads' + path.sep + 'images' + path.sep + 'drivers',
           riders: path.sep + 'uploads' + path.sep + 'images' + path.sep + 'riders',
@@ -11,7 +8,6 @@ const IMAGES_DESTINATIONS = {
           vehicule:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehicules',
           publicite:path.sep +'uploads' + path.sep + 'images' + path.sep + 'publicite',
           VehiculeMarque:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehiculeMarques',
-          VehiculeModele:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehiculeModeles',
           VehiculeModele:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehiculeModeles',
           Proprietairepassport:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairepassport',
           Proprietairelogo:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairelogo',

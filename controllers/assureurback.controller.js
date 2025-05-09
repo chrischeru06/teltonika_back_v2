@@ -195,6 +195,7 @@ const create_assureur = async (req, res) => {
         if (ICON_LOGO) {
             const AssureurUpload = new Assureurpload();
             const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
+
             // Création de l'URL du fichier
             iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
         }
@@ -212,7 +213,7 @@ const create_assureur = async (req, res) => {
             ID_UTILISATEUR:1,
             ICON_LOGO: iconUrl,
         });
-        const idassureur= datainsert.toJSON().ID_ASSUREUR 
+        // const idassureur= datainsert.toJSON().ID_ASSUREUR 
          await Users.create({
             IDENTIFICATION:identificationCode,
             USER_NAME:EMAIL,
@@ -220,7 +221,6 @@ const create_assureur = async (req, res) => {
             PASSWORD:hashedPassword,
             PROFIL_ID:1,
             STATUT:1,
-            ID_ASSURREUR:idassureur
         });
         res.status(RESPONSE_CODES.CREATED).json({
             statusCode: RESPONSE_CODES.CREATED,

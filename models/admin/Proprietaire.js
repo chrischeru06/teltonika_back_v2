@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const {DataTypes } = require('sequelize');
 const sequelize = require('../../utils/sequerize');
 const Type_proprietaire = require('./Type_proprietaire');
 const Type_proprietaire_moral = require('./Type_proprietaire_moral');
@@ -90,11 +90,11 @@ const Proprietaire = sequelize.define("proprietaire", {
     },
     PHOTO_PASSPORT: {
         type: DataTypes.STRING(255),
-        allowNull: false
+        allowNull: true
     },
     FILE_CNI_PASSPORT: {
         type: DataTypes.STRING(250),
-        allowNull: false
+        allowNull: true
     },
     LOGO: {
         type: DataTypes.STRING(250),

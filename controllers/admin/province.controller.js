@@ -1,8 +1,7 @@
 const express = require("express")
 const RESPONSE_CODES = require("../../constants/RESPONSE_CODES")
 const RESPONSE_STATUS = require("../../constants/RESPONSE_STATUS")
-const { Op, where } = require("sequelize")
-const Validation = require("../../class/Validation")
+const { Op} = require("sequelize")
 const Syst_provinces = require("../../models/admin/Syst_province")
 
 /**
@@ -14,7 +13,6 @@ const Syst_provinces = require("../../models/admin/Syst_province")
 const findAll = async (req, res) => {
     try {
         const { rows = 50, first = 0, sortField, sortOrder, search } = req.query
-        const defaultSortField = "PROVINCE_ID"
         const defaultSortDirection = "DESC"
         const sortColumns = {
             province_info: {

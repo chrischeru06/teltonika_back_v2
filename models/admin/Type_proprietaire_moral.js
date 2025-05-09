@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const {DataTypes } = require('sequelize');
 const sequelize = require('../../utils/sequerize');
 
 const type_proprietaire_morale = sequelize.define("Type_proprietaire_morale", {

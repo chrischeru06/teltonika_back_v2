@@ -1,5 +1,6 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const {DataTypes } = require("sequelize");
 const sequelize = require("../../utils/sequerize");
+const chauffeur = require("./Chauffeur");
 const Zone_affectation = sequelize.define(
   "chauffeur_zone_affectation",
   {
@@ -36,6 +37,6 @@ const Zone_affectation = sequelize.define(
     timestamps: false,
   }
 );
-
+Zone_affectation.belongsTo(chauffeur,{foreignKey:'CHAUFFEUR_ID',as:'chauffeur'})
 
 module.exports = Zone_affectation;

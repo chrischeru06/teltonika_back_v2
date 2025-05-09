@@ -1,13 +1,8 @@
 const express = require("express")
 const RESPONSE_CODES = require("../../constants/RESPONSE_CODES")
 const RESPONSE_STATUS = require("../../constants/RESPONSE_STATUS")
-const { Op, where } = require("sequelize")
-const Validation = require("../../class/Validation")
+const { Op} = require("sequelize")
 const Syst_zones = require("../../models/admin/Syst_zone")
-const Zone_affectation = require("../../models/admin/Zone_affectation_chauffeur")
-const Vehicules = require("../../models/admin/Vehicules")
-const marque = require("../../models/admin/Marque")
-const model_vehicule = require("../../models/admin/Model")
 /**
  * Lister tous les demandes des courses
  * @param {express.Request} req 
@@ -18,7 +13,6 @@ const findAll = async (req, res) => {
     try {
         const {COMMUNE_ID}= req.params
         const { rows = 1000, first = 0, sortField, sortOrder, search } = req.query
-        const defaultSortField = "COMMUNE_ID"
         const defaultSortDirection = "DESC"
         const sortColumns = {
             zone_info: {

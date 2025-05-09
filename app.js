@@ -87,7 +87,7 @@ app.all("*", (req, res) => {
 });
 
 // Configuration du serveur
-const isHttps = process.env.ENABLE_HTTPS == 1;
+const isHttps = process.env.ENABLE_HTTPS == true;
 let server;
 if (isHttps) {
    const options = {

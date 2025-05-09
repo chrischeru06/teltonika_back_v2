@@ -39,16 +39,21 @@ i18n.configure({
 app.use(i18n.init);
 
 // Configuration CORS
-var corsOptions = {
-   origin: function (origin, callback) {
-      if (!origin || (origin && ALLOWED_ORIGINS.indexOf(origin) !== -1)) {
-         callback(null, true);
-      } else {
-         callback(new Error("Not allowed by CORS"));
-      }
-   },
-};
-app.use(cors(corsOptions));
+app.use(
+   cors({
+     origin: "*",
+   })
+ );
+// var corsOptions = {
+//    origin: function (origin, callback) {
+//       if (!origin || (origin && ALLOWED_ORIGINS.indexOf(origin) !== -1)) {
+//          callback(null, true);
+//       } else {
+//          callback(new Error("Not allowed by CORS"));
+//       }
+//    },
+// };
+// app.use(cors(corsOptions));
 
 // Configuration des middlewares
 app.set("view engine", "ejs");

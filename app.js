@@ -43,14 +43,6 @@ app.use(
    })
  );
 // Configuration CORS
-<<<<<<< HEAD
-app.use(
-   cors({
-     origin: "*",
-   })
- );
-=======
->>>>>>> develop
 // var corsOptions = {
 //    origin: function (origin, callback) {
 //       if (!origin || (origin && ALLOWED_ORIGINS.indexOf(origin) !== -1)) {
@@ -60,10 +52,6 @@ app.use(
 //       }
 //    },
 // };
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
 // app.use(cors(corsOptions));
 
 // Configuration des middlewares

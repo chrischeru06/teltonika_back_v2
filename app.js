@@ -37,13 +37,20 @@ i18n.configure({
    updateFiles: false,
 });
 app.use(i18n.init);
-
-// Configuration CORS
 app.use(
    cors({
      origin: "*",
    })
  );
+// Configuration CORS
+<<<<<<< HEAD
+app.use(
+   cors({
+     origin: "*",
+   })
+ );
+=======
+>>>>>>> develop
 // var corsOptions = {
 //    origin: function (origin, callback) {
 //       if (!origin || (origin && ALLOWED_ORIGINS.indexOf(origin) !== -1)) {
@@ -53,6 +60,10 @@ app.use(
 //       }
 //    },
 // };
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
 // app.use(cors(corsOptions));
 
 // Configuration des middlewares

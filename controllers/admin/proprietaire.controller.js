@@ -353,6 +353,7 @@ const create_proprietaire = async (req, res) => {
          statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
          httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
          message: "Erreur interne du serveur, réessayez plus tard",
+         message:error,
       })
    }
 }

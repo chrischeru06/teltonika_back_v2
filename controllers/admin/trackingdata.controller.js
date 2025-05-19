@@ -158,18 +158,119 @@ const findtrackingbyimei = async (req, res) => {
         });
     }
 };
+// const findallcartruck = async (req, res) => {
+//     try {
+//         const result = await data_tracking.findAndCountAll({});
+        
+//         // Vérifiez si les données existent dans result.rows
+//         if (!result || !result.rows || result.rows.length === 0) {
+//             return res.status(RESPONSE_CODES.NOT_FOUND).json({
+//                 statusCode: RESPONSE_CODES.NOT_FOUND,
+//                 httpStatus: RESPONSE_STATUS.NOT_FOUND,
+//                 message: "Aucune donnée trouvée.",
+//             });
+//         }
+
+//         const vehicules = result.rows;
+
+//         // Extraire les IMEIs et les chemins des fichiers
+//         const trackingData = vehicules.map(v => {
+//             if (v.dataValues && v.dataValues.file_path) {
+//                 return {
+//                     imei: v.dataValues.imei, // Assurez-vous que l'IMEI est dans vos données
+//                     filePath: v.dataValues.file_path
+//                 };
+//             }
+//             return null;
+//         }).filter(data => data !== null); // Filtrez les valeurs nulles
+
+//         // Récupérer les véhicules correspondants
+//         const imeis = trackingData.map(data => data.imei);
+//         const vehiculeData = await Vehicules.findAll({
+//             where: { CODE: imeis },
+//             include: [
+//                 {
+//                     model: marque,
+//                     as: 'marques'
+//                 },
+//                 {
+//                     model: model_vehicule,
+//                     as: 'modele'
+//                 }
+//             ]
+//         });
+
+//         // Lire les fichiers et assembler les résultats
+//         const results = [];
+//         for (const data of trackingData) {
+//             const fullPath = path.join(TRACKING_FILES_DIR, data.filePath);
+//             if (fs.existsSync(fullPath)) {
+//                 const fileContent = fs.readFileSync(fullPath, 'utf-8');
+//                 const jsonContent = JSON.parse(fileContent); // Parsez le contenu JSON
+
+//                 // Trouver le véhicule correspondant
+//                 const vehicule = vehiculeData.find(v => v.CODE === data.imei);
+//                 const chauffeurers = await Zone_affectation.findAndCountAll({
+//                     include: {
+//                         model: chauffeur,
+//                         as: 'chauffeur'
+//                     },
+//                     where: {
+//                         VEHICULE_ID: vehicule ? vehicule.VEHICULE_ID : null
+//                     }
+//                 });
+
+//                 results.push({
+//                     imei: data.imei,
+//                     fileData: jsonContent,
+//                     vehicule,
+//                     chauffeurs: chauffeurers
+//                 });
+//             } else {
+//                 console.warn(`Fichier non trouvé pour l'IMEI: ${data.imei}`);
+//             }
+//         }
+
+//         res.status(RESPONSE_CODES.OK).json({
+//             statusCode: RESPONSE_CODES.OK,
+//             httpStatus: RESPONSE_STATUS.OK,
+//             message: "Historique tracking",
+//             result: results
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
+//             statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
+//             httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
+//             message: "Erreur interne du serveur, réessayez plus tard.",
+//         });
+//     }
+// };
 const findallcartruck = async (req, res) => {
     try {
-        const result = await data_tracking.findAndCountAll({});
-        
+        // Obtenir la date du jour actuel
+        const today = new Date();
+        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+
+        // Récupérer seulement les données du jour actuel
+        const result = await data_tracking.findAndCountAll({
+            where: {
+                created_at: {
+                    [Op.gte]: startOfDay,
+                    [Op.lte]: endOfDay
+                }
+            }
+        });
+
         // Vérifiez si les données existent dans result.rows
-        if (!result || !result.rows || result.rows.length === 0) {
-            return res.status(RESPONSE_CODES.NOT_FOUND).json({
-                statusCode: RESPONSE_CODES.NOT_FOUND,
-                httpStatus: RESPONSE_STATUS.NOT_FOUND,
-                message: "Aucune donnée trouvée.",
-            });
-        }
+        // if (!result || !result.rows || result.rows.length === 0) {
+        //     return res.status(RESPONSE_CODES.NOT_FOUND).json({
+        //         statusCode: RESPONSE_CODES.NOT_FOUND,
+        //         httpStatus: RESPONSE_STATUS.NOT_FOUND,
+        //         message: "Aucune donnée trouvée pour aujourd'hui.",
+        //     });
+        // }
 
         const vehicules = result.rows;
 
@@ -177,8 +278,9 @@ const findallcartruck = async (req, res) => {
         const trackingData = vehicules.map(v => {
             if (v.dataValues && v.dataValues.file_path) {
                 return {
-                    imei: v.dataValues.imei, // Assurez-vous que l'IMEI est dans vos données
-                    filePath: v.dataValues.file_path
+                    imei: v.dataValues.imei,
+                    filePath: v.dataValues.file_path,
+                    createdAt: v.dataValues.created_at
                 };
             }
             return null;
@@ -206,7 +308,7 @@ const findallcartruck = async (req, res) => {
             const fullPath = path.join(TRACKING_FILES_DIR, data.filePath);
             if (fs.existsSync(fullPath)) {
                 const fileContent = fs.readFileSync(fullPath, 'utf-8');
-                const jsonContent = JSON.parse(fileContent); // Parsez le contenu JSON
+                const jsonContent = JSON.parse(fileContent);
 
                 // Trouver le véhicule correspondant
                 const vehicule = vehiculeData.find(v => v.CODE === data.imei);
@@ -224,7 +326,8 @@ const findallcartruck = async (req, res) => {
                     imei: data.imei,
                     fileData: jsonContent,
                     vehicule,
-                    chauffeurs: chauffeurers
+                    chauffeurs: chauffeurers,
+                    date_tracking: data.createdAt
                 });
             } else {
                 console.warn(`Fichier non trouvé pour l'IMEI: ${data.imei}`);
@@ -234,8 +337,9 @@ const findallcartruck = async (req, res) => {
         res.status(RESPONSE_CODES.OK).json({
             statusCode: RESPONSE_CODES.OK,
             httpStatus: RESPONSE_STATUS.OK,
-            message: "Historique tracking",
-            result: results
+            message: "Historique tracking du jour actuel",
+            result: results,
+            total: results.length
         });
     } catch (error) {
         console.log(error);
@@ -246,7 +350,6 @@ const findallcartruck = async (req, res) => {
         });
     }
 };
-
 const findallcartruckbyimei = async (req, res) => {
     try {
         const{imei}=req.params

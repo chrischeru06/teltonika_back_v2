@@ -192,12 +192,12 @@ const create_assureur = async (req, res) => {
         }
         let iconUrl = null;
 
-        if (ICON_LOGO) {
-            const AssureurUpload = new Assureurpload();
-            const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
-            // Création de l'URL du fichier
-            iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
-        }
+        // if (ICON_LOGO) {
+        //     const AssureurUpload = new Assureurpload();
+        //     const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
+        //     // Création de l'URL du fichier
+        //     iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
+        // }
           // Generate a random identification code
           const identificationCode = randomInt(100000, 999999); // Generates a 6-digit code
             // Hash the password

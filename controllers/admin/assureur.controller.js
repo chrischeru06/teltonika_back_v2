@@ -210,7 +210,9 @@ const create_assureur = async (req, res) => {
             NIF,
             ADRESSE,
             ID_UTILISATEUR:1,
-            ICON_LOGO: iconUrl,
+            ICON_LOGO: 'null'
+            // ICON_LOGO: iconUrl,
+
         });
         const idassureur= datainsert.toJSON().ID_ASSUREUR 
          await Users.create({

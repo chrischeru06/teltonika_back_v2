@@ -9,7 +9,7 @@ const IMAGES_DESTINATIONS = {
           publicite:path.sep +'uploads' + path.sep + 'images' + path.sep + 'publicite',
           VehiculeMarque:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehiculeMarques',
           VehiculeModele:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'vehiculeModeles',
-          Proprietairepassport:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairepassport',
+          Proprietairepassport:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'proprietairepassport',
           Proprietairelogo:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairelogo',
           Proprietairefilecni:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairefilecni',
           Proprietairefilenif:path.sep + 'uploads' + path.sep + 'images' + path.sep + 'Proprietairefilenif',

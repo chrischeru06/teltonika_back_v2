@@ -157,7 +157,7 @@ const create_assureur = async (req, res) => {
         const files = req.files || {};
         const { ICON_LOGO } = files
         const data = { ...req.files, ...req.body };
-        return  console.log(data,'les data')
+        // return  console.log(data,'les data')
         const validation = new Validation(data, {
             ASSURANCE: {
                 required: true

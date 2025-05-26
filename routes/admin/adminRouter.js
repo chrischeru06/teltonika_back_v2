@@ -20,9 +20,11 @@ const user_routes = require('./user.routes');
 const profil_routes = require('./profil.routes');
 const tracking_routes = require('./tracking.routes');
 const operateur_resau_routes = require('./operateur_resau.routes');
+const realtime_routes = require('./realtimedata.routes');
 const adminRouter = express.Router();
 
 adminRouter.use('/assureur', assureur_routes)
+adminRouter.use('/realtime', realtime_routes)
 adminRouter.use('/marque', marque_routes)
 adminRouter.use('/proprietaire', proprietaire_routes)
 adminRouter.use('/model', model_routes)

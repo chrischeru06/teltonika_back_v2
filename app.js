@@ -107,6 +107,7 @@ if (isHttps) {
 // Configuration de Socket.IO
 const io = new Server(server, {
    cors: { origin: "*", methods: ["GET", "POST"] },
+    credentials: true
 });
 
 // Gestion des événements Socket.IO

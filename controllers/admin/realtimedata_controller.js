@@ -2,7 +2,7 @@ const RESPONSE_CODES = require("../../constants/RESPONSE_CODES");
 const alldata = async (req, res) => {
     try {
         const { imei, gps, timestamp, priority, ioElements } = req.body;
-        req.app.io.to("vehicule_change_${imei}").emit("DRIVVER", {
+        req.app.io.to(`vehicule_change_${imei}`).emit("DRIVVER", {
              imei,
             position: gps,
             timestamp,

@@ -21,6 +21,7 @@ const profil_routes = require('./profil.routes');
 const tracking_routes = require('./tracking.routes');
 const operateur_resau_routes = require('./operateur_resau.routes');
 const realtime_routes = require('./realtimedata.routes');
+const device_routes = require('./device.routes');
 const adminRouter = express.Router();
 
 adminRouter.use('/assureur', assureur_routes)
@@ -45,6 +46,7 @@ adminRouter.use('/utilisateur', user_routes)
 adminRouter.use('/profil', profil_routes)
 adminRouter.use('/tracking', tracking_routes)
 adminRouter.use('/operateur', operateur_resau_routes)
+adminRouter.use('/device', device_routes)
 
 module.exports = adminRouter
 

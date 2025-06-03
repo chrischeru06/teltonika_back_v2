@@ -274,6 +274,7 @@ const create_assureur = async (req, res) => {
                 statusCode: 400,
                 httpStatus: 'VALIDATION_ERROR',
                 message: "Erreur de validation de la base de données",
+                message:error,
                 result: error.errors
             });
         }

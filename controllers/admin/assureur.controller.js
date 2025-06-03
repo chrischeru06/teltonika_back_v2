@@ -153,24 +153,40 @@ const findAll = async (req, res) => {
  */
 const create_assureur = async (req, res) => {
     try {
-        const {ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
+        // Vérification des données reçues
+        console.log('Body reçu:', req.body);
+        console.log('Files reçus:', req.files);
+
+        const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
         const files = req.files || {};
-        const { ICON_LOGO } = files
+        const { ICON_LOGO } = files;
+        
+        // Vérification que les données requises sont présentes
+        if (!ASSURANCE || !EMAIL || !TELEPHONE || !NIF || !ADRESSE) {
+            return res.status(400).json({
+                statusCode: 400,
+                httpStatus: 'BAD_REQUEST',
+                message: "Données manquantes",
+                result: {
+                    required: ['ASSURANCE', 'EMAIL', 'TELEPHONE', 'NIF', 'ADRESSE'],
+                    received: { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE }
+                }
+            });
+        }
+
         const data = { ...req.files, ...req.body };
-        // return  console.log(data,'les data')
+        
+        // Validation avec gestion d'erreur
         const validation = new Validation(data, {
             ASSURANCE: {
                 required: true
             },
-            
             EMAIL: {
                 required: true,
-            }
-            ,
+            },
             TELEPHONE: {
                 required: true,
-            }
-            ,
+            },
             NIF: {
                 required: true,
             },
@@ -181,8 +197,10 @@ const create_assureur = async (req, res) => {
 
         await validation.run();
         const isValid = await validation.isValidate();
+        
         if (!isValid) {
             const errors = await validation.getErrors();
+            console.log('Erreurs de validation:', errors);
             return res.status(RESPONSE_CODES.UNPROCESSABLE_ENTITY).json({
                 statusCode: RESPONSE_CODES.UNPROCESSABLE_ENTITY,
                 httpStatus: RESPONSE_STATUS.UNPROCESSABLE_ENTITY,
@@ -190,53 +208,104 @@ const create_assureur = async (req, res) => {
                 result: errors,
             });
         }
+
         let iconUrl = null;
 
+        // Gestion du fichier avec try-catch
         if (ICON_LOGO) {
-            const AssureurUpload = new Assureurpload();
-            const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
-            // Création de l'URL du fichier
-            iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
+            try {
+                const AssureurUpload = new Assureurpload();
+                const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
+                iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
+                console.log('Fichier uploadé:', iconUrl);
+            } catch (uploadError) {
+                console.error('Erreur upload fichier:', uploadError);
+                // Continuer sans le fichier ou retourner une erreur selon vos besoins
+            }
         }
-          // Generate a random identification code
-          const identificationCode = randomInt(100000, 999999); // Generates a 6-digit code
-            // Hash the password
-        const hashedPassword = await bcrypt.hash("12345678", 10); // Hashing with a salt rounds of 10
 
+        // Génération du code d'identification
+        const identificationCode = randomInt(100000, 999999);
+        
+        // Hash du mot de passe
+        const hashedPassword = await bcrypt.hash("12345678", 10);
+
+        console.log('Tentative de création assureur avec:', {
+            ASSURANCE,
+            EMAIL,
+            TELEPHONE,
+            NIF,
+            ADRESSE,
+            ICON_LOGO: iconUrl
+        });
+
+        // Création de l'assureur avec gestion d'erreur
         const datainsert = await Assureur.create({
             ASSURANCE,
             EMAIL,
             TELEPHONE,
             NIF,
             ADRESSE,
-            ID_UTILISATEUR:1,
-            // ICON_LOGO: 'null'
+            ID_UTILISATEUR: 1,
             ICON_LOGO: iconUrl,
+        });
 
-        });
-        const idassureur= datainsert.toJSON().ID_ASSUREUR 
-         await Users.create({
-            IDENTIFICATION:identificationCode,
-            USER_NAME:EMAIL,
+        console.log('Assureur créé:', datainsert.toJSON());
+
+        const idassureur = datainsert.toJSON().ID_ASSUREUR;
+
+        console.log('Tentative de création utilisateur avec ID_ASSURREUR:', idassureur);
+
+        // Création de l'utilisateur avec gestion d'erreur
+        const userCreated = await Users.create({
+            IDENTIFICATION: identificationCode,
+            USER_NAME: EMAIL,
             TELEPHONE,
-            PASSWORD:hashedPassword,
-            PROFIL_ID:1,
-            STATUT:1,
-            ID_ASSURREUR:idassureur
+            PASSWORD: hashedPassword,
+            PROFIL_ID: 1,
+            STATUT: 1,
+            ID_ASSURREUR: idassureur // Vérifiez l'orthographe dans votre base de données
         });
+
+        console.log('Utilisateur créé:', userCreated.toJSON());
+
         res.status(RESPONSE_CODES.CREATED).json({
             statusCode: RESPONSE_CODES.CREATED,
             httpStatus: RESPONSE_STATUS.CREATED,
-            message: "donnee creer avec success",
-            result: datainsert
+            message: "Données créées avec succès",
+            result: {
+                assureur: datainsert,
+                user: userCreated
+            }
         });
+
     } catch (error) {
-        console.log(error);
+        console.error('Erreur complète:', error);
+        
+        // Gestion spécifique des erreurs de base de données
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                statusCode: 400,
+                httpStatus: 'VALIDATION_ERROR',
+                message: "Erreur de validation de la base de données",
+                result: error.errors
+            });
+        }
+
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).json({
+                statusCode: 409,
+                httpStatus: 'CONFLICT',
+                message: "Cette donnée existe déjà",
+                result: error.errors
+            });
+        }
+
         res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
             statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
             httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
-            message: erreur,
             message: "Erreur interne du serveur, réessayez plus tard",
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
 };

@@ -160,22 +160,8 @@ const create_assureur = async (req, res) => {
         const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
         const files = req.files || {};
         const { ICON_LOGO } = files;
-        
-        // Vérification que les données requises sont présentes
-        if (!ASSURANCE || !EMAIL || !TELEPHONE || !NIF || !ADRESSE) {
-            return res.status(400).json({
-                statusCode: 400,
-                httpStatus: 'BAD_REQUEST',
-                message: "Données manquantes",
-                result: {
-                    required: ['ASSURANCE', 'EMAIL', 'TELEPHONE', 'NIF', 'ADRESSE'],
-                    received: { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE }
-                }
-            });
-        }
-
         const data = { ...req.files, ...req.body };
-        
+         return console.log(data,'les informations')
         // Validation avec gestion d'erreur
         const validation = new Validation(data, {
             ASSURANCE: {

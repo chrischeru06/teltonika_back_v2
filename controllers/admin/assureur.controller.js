@@ -233,7 +233,7 @@ const create_assureur = async (req, res) => {
             NIF,
             ADRESSE,
             ID_UTILISATEUR: 1,
-            ICON_LOGO: iconUrl,
+            // ICON_LOGO: iconUrl,
         });
 
         console.log('Assureur créé:', datainsert.toJSON());

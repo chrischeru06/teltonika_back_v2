@@ -13,6 +13,7 @@ const Users = require("../../models/admin/Users")
 const randomInt = require("../../utils/randomInt")
 const bcrypt = require("bcrypt");
 const path = require('path');
+const fs = require('fs');
 /**
  * Lister tous les demandes des courses
  * @param {express.Request} req 

@@ -12,6 +12,7 @@ const model_vehicule = require("../../models/admin/Model")
 const Users = require("../../models/admin/Users")
 const randomInt = require("../../utils/randomInt")
 const bcrypt = require("bcrypt");
+const path = require('path');
 /**
  * Lister tous les demandes des courses
  * @param {express.Request} req 

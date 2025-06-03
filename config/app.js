@@ -3,13 +3,11 @@ const dotenv = require("dotenv")
 dotenv.config()
 module.exports = {
    DEFAULT_TIMEZONE: "Africa/bujumbura",
-   BACKEND_URL: process.env.NODE_ENV == "local" ? "http://localhost:3000" : "https://prodev.mediabox.bi:1058",
+   BACKEND_URL: process.env.NODE_ENV == "local" ? "http://localhost:3000" : "https://apps.mediabox.bi:5031",
    ALLOWED_ORIGINS: [
       "http://localhost:8000",
-      "https://devapi.mediabox.bi:22605",
-      "https://devapi.mediabox.bi:22705",
-      "https://apps.mediabox.bi:22705",
-      "https://devapi.mediabox.bi:28090",
+      "https://apps.mediabox.bi:5030"
+  
    ],
    IMAGES_MIMES: ["image/jpeg", "image/gif", "image/png"],
    /**

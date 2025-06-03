@@ -43,17 +43,17 @@ app.use(i18n.init);
 //    })
 //  );
 // Configuration CORS
-var corsOptions = {
-   origin: function (origin, callback) {
-      if (!origin || (origin && ALLOWED_ORIGINS.indexOf(origin) !== -1)) {
-         callback(null, true);
-      } else {
-         callback(new Error("Not allowed by CORS"));
-      }
-   },
-};
-app.use(cors(corsOptions));
-
+// var corsOptions = {
+//    origin: function (origin, callback) {
+//       if (!origin || (origin && ALLOWED_ORIGINS.indexOf(origin) !== -1)) {
+//          callback(null, true);
+//       } else {
+//          callback(new Error("Not allowed by CORS"));
+//       }
+//    },
+// };
+// app.use(cors(corsOptions));
+app.use(cors({origin: "*",}));
 // Configuration des middlewares
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));

@@ -153,30 +153,17 @@ const findAll = async (req, res) => {
  */
 const create_assureur = async (req, res) => {
     try {
-        const {ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
+        const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
         const files = req.files || {};
-        const { ICON_LOGO } = files
-        const data = { ...req.files, ...req.body };
-        // return  console.log(data,'les data')
+        const { ICON_LOGO } = files;
+
+        const data = { ...req.body, ...req.files };
         const validation = new Validation(data, {
-            ASSURANCE: {
-                required: true
-            },
-            
-            EMAIL: {
-                required: true,
-            }
-            ,
-            TELEPHONE: {
-                required: true,
-            }
-            ,
-            NIF: {
-                required: true,
-            },
-            ADRESSE: {
-                required: true,
-            },
+            ASSURANCE: { required: true },
+            EMAIL: { required: true },
+            TELEPHONE: { required: true },
+            NIF: { required: true },
+            ADRESSE: { required: true },
         });
 
         await validation.run();
@@ -190,18 +177,16 @@ const create_assureur = async (req, res) => {
                 result: errors,
             });
         }
-        let iconUrl = null;
 
+        let iconUrl = null;
         if (ICON_LOGO) {
             const AssureurUpload = new Assureurpload();
             const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
-            // Création de l'URL du fichier
             iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
         }
-          // Generate a random identification code
-          const identificationCode = randomInt(100000, 999999); // Generates a 6-digit code
-            // Hash the password
-        const hashedPassword = await bcrypt.hash("12345678", 10); // Hashing with a salt rounds of 10
+
+        const identificationCode = randomInt(100000, 999999);
+        const hashedPassword = await bcrypt.hash("12345678", 10);
 
         const datainsert = await Assureur.create({
             ASSURANCE,
@@ -209,33 +194,33 @@ const create_assureur = async (req, res) => {
             TELEPHONE,
             NIF,
             ADRESSE,
-            ID_UTILISATEUR:1,
-            // ICON_LOGO: 'null'
+            ID_UTILISATEUR: 1,
             ICON_LOGO: iconUrl,
+        });
 
-        });
-        const idassureur= datainsert.toJSON().ID_ASSUREUR 
-         await Users.create({
-            IDENTIFICATION:identificationCode,
-            USER_NAME:EMAIL,
+        const idassureur = datainsert.toJSON().ID_ASSUREUR;
+        await Users.create({
+            IDENTIFICATION: identificationCode,
+            USER_NAME: EMAIL,
             TELEPHONE,
-            PASSWORD:hashedPassword,
-            PROFIL_ID:1,
-            STATUT:1,
-            ID_ASSURREUR:idassureur
+            PASSWORD: hashedPassword,
+            PROFIL_ID: 1,
+            STATUT: 1,
+            ID_ASSURREUR: idassureur,
         });
+
         res.status(RESPONSE_CODES.CREATED).json({
             statusCode: RESPONSE_CODES.CREATED,
             httpStatus: RESPONSE_STATUS.CREATED,
-            message: "donnee creer avec success",
-            result: datainsert
+            message: "Données créées avec succès",
+            result: datainsert,
         });
     } catch (error) {
         console.log(error);
         res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
             statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
             httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
-            message: erreur,
+            message: error.message, // Correction ici
             message: "Erreur interne du serveur, réessayez plus tard",
         });
     }

@@ -256,6 +256,8 @@ const findAll = async (req, res) => {
 
 const create_assureur = async (req, res) => {
     try {
+        console.log('Début de la fonction create_assureur');
+
         const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
         const files = req.files || {};
         const { ICON_LOGO } = files;
@@ -269,6 +271,7 @@ const create_assureur = async (req, res) => {
             ADRESSE: { required: true },
         });
 
+        console.log('Validation des données en cours...');
         await validation.run();
         const isValid = await validation.isValidate();
         
@@ -289,6 +292,7 @@ const create_assureur = async (req, res) => {
             const imagesPath = path.join(__dirname, '..', 'public', 'uploads', 'images');
             if (!fs.existsSync(imagesPath)) {
                 fs.mkdirSync(imagesPath, { recursive: true });
+                console.log(`Répertoire créé : ${imagesPath}`);
             }
 
             const AssureurUpload = new Assureurpload();
@@ -320,6 +324,7 @@ const create_assureur = async (req, res) => {
             ID_ASSURREUR: idassureur,
         });
 
+        console.log('Données insérées avec succès');
         res.status(RESPONSE_CODES.CREATED).json({
             statusCode: RESPONSE_CODES.CREATED,
             httpStatus: RESPONSE_STATUS.CREATED,
@@ -329,31 +334,10 @@ const create_assureur = async (req, res) => {
 
     } catch (error) {
         console.error('Erreur complète:', error);
-        
-        // Gestion spécifique des erreurs de base de données
-        if (error.name === 'SequelizeValidationError') {
-            return res.status(400).json({
-                statusCode: 400,
-                httpStatus: 'VALIDATION_ERROR',
-                message: "Erreur de validation de la base de données",
-                result: error.errors
-            });
-        }
-
-        if (error.name === 'SequelizeUniqueConstraintError') {
-            return res.status(409).json({
-                statusCode: 409,
-                httpStatus: 'CONFLICT',
-                message: "Cette donnée existe déjà",
-                result: error.errors
-            });
-        }
-
-        res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
-            statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
-            httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
-            message: error.message,
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        res.status(500).json({
+            statusCode: 500,
+            httpStatus: "INTERNAL_SERVER_ERROR",
+            message: error.message || "Erreur interne du serveur",
         });
     }
 };

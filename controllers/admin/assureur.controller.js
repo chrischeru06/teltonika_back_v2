@@ -232,8 +232,10 @@ const create_assureur = async (req, res) => {
             TELEPHONE,
             NIF,
             ADRESSE,
-            ID_UTILISATEUR: 1,
-            // ICON_LOGO: iconUrl,
+            ID_UTILISATEUR:1,
+            // ICON_LOGO: 'null'
+            ICON_LOGO: iconUrl,
+
         });
 
         console.log('Assureur créé:', datainsert.toJSON());
@@ -291,6 +293,7 @@ const create_assureur = async (req, res) => {
         res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
             statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
             httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
+            message: erreur,
             message: "Erreur interne du serveur, réessayez plus tard",
             message:error,
             error: process.env.NODE_ENV === 'development' ? error.message : undefined

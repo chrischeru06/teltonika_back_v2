@@ -161,7 +161,7 @@ const create_assureur = async (req, res) => {
         const files = req.files || {};
         const { ICON_LOGO } = files;
         const data = { ...req.files, ...req.body };
-         return console.log(data,'les informations')
+          console.log(data,'les informations')
         // Validation avec gestion d'erreur
         const validation = new Validation(data, {
             ASSURANCE: {

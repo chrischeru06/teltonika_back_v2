@@ -210,7 +210,9 @@ const create_assureur = async (req, res) => {
             NIF,
             ADRESSE,
             ID_UTILISATEUR:1,
+            // ICON_LOGO: 'null'
             ICON_LOGO: iconUrl,
+
         });
         const idassureur= datainsert.toJSON().ID_ASSUREUR 
          await Users.create({
@@ -233,6 +235,7 @@ const create_assureur = async (req, res) => {
         res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
             statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
             httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
+            message: erreur,
             message: "Erreur interne du serveur, réessayez plus tard",
         });
     }
@@ -315,95 +318,6 @@ const update_assureur = async (req, res) => {
     }
 };
 
-
-// const update_assureur = async (req, res) => {
-//     try {
-//         const { ID_ASSUREUR } = req.params;
-//         const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
-//         const files = req.files || {};
-//         const { ICON_LOGO } = files
-//         const data = { ...req.files, ...req.body };
-//         const validation = new Validation(data, {
-//             ASSURANCE: {
-//                 required: true
-//             },
-            
-//             EMAIL: {
-//                 required: true,
-//             }
-//             ,
-//             TELEPHONE: {
-//                 required: true,
-//             }
-//             ,
-//             NIF: {
-//                 required: true,
-//             },
-//             ADRESSE: {
-//                 required: true,
-//             },
-//         });
-
-//         await validation.run();
-//         const isValid = await validation.isValidate();
-//         if (!isValid) {
-//             const errors = await validation.getErrors();
-//             return res.status(RESPONSE_CODES.UNPROCESSABLE_ENTITY).json({
-//                 statusCode: RESPONSE_CODES.UNPROCESSABLE_ENTITY,
-//                 httpStatus: RESPONSE_STATUS.UNPROCESSABLE_ENTITY,
-//                 message: "Problème de validation des données",
-//                 result: errors,
-//             });
-//         }
-//          // On récupère les anciennes données
-//          const assureur = await Assureur.findByPk(ID_ASSUREUR, {
-//             attributes: ["ICON_LOGO", "ID_ASSUREUR"],
-//         });
-
-//         if (!assureur) {
-//             return res.status(RESPONSE_CODES.NOT_FOUND).json({
-//                 statusCode: RESPONSE_CODES.NOT_FOUND,
-//                 httpStatus: RESPONSE_STATUS.NOT_FOUND,
-//                 message: "Assureur non trouvé",
-//             });
-//         }
-
-//         // Upload de la nouvelle image si fournie
-//         let iconUrl = assureur.ICON_LOGO;
-
-//         if (ICON_LOGO) {
-//             const AssureurUpload = new Assureurpload();
-//             const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
-//             iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
-//         }
-
-//         const datainsert = await Assureur.update({
-//             ASSURANCE,
-//             EMAIL,
-//             TELEPHONE,
-//             NIF,
-//             ADRESSE,
-//             ICON_LOGO: iconUrl,
-//         },
-//             {
-//                 where: { ID_ASSUREUR: ID_ASSUREUR}
-//             });
-
-//         res.status(RESPONSE_CODES.CREATED).json({
-//             statusCode: RESPONSE_CODES.CREATED,
-//             httpStatus: RESPONSE_STATUS.CREATED,
-//             message: "donnee creer avec success",
-//             result: datainsert
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
-//             statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
-//             httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
-//             message: "Erreur interne du serveur, réessayez plus tard",
-//         });
-//     }
-// };
 const deleteItems = async (req, res) => {
     try {
         const { ids } = req.body;

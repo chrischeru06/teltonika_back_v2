@@ -19,7 +19,7 @@ class Upload {
       if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath, { 
           recursive: true,
-          mode: 0o755 // Lecture/écriture pour l'owner, lecture pour les autres
+          mode: 777 // Lecture/écriture pour l'owner, lecture pour les autres
         });
         console.log(`Dossier créé: ${dirPath}`);
       }

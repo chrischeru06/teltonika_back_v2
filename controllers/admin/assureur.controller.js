@@ -153,32 +153,17 @@ const findAll = async (req, res) => {
  */
 const create_assureur = async (req, res) => {
     try {
-        // Vérification des données reçues
-        console.log('Body reçu:', req.body);
-        console.log('Files reçus:', req.files);
-
         const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
         const files = req.files || {};
         const { ICON_LOGO } = files;
-        const data = { ...req.files, ...req.body };
-          console.log(data,'les informations')
-        // Validation avec gestion d'erreur
+
+        const data = { ...req.body, ...req.files };
         const validation = new Validation(data, {
-            ASSURANCE: {
-                required: true
-            },
-            EMAIL: {
-                required: true,
-            },
-            TELEPHONE: {
-                required: true,
-            },
-            NIF: {
-                required: true,
-            },
-            ADRESSE: {
-                required: true,
-            },
+            ASSURANCE: { required: true },
+            EMAIL: { required: true },
+            TELEPHONE: { required: true },
+            NIF: { required: true },
+            ADRESSE: { required: true },
         });
 
         await validation.run();
@@ -196,75 +181,41 @@ const create_assureur = async (req, res) => {
         }
 
         let iconUrl = null;
-
-        // Gestion du fichier avec try-catch
         if (ICON_LOGO) {
-            try {
-                const AssureurUpload = new Assureurpload();
-                const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
-                iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
-                console.log('Fichier uploadé:', iconUrl);
-            } catch (uploadError) {
-                console.error('Erreur upload fichier:', uploadError);
-                // Continuer sans le fichier ou retourner une erreur selon vos besoins
-            }
+            const AssureurUpload = new Assureurpload();
+            const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
+            iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
         }
 
-        // Génération du code d'identification
         const identificationCode = randomInt(100000, 999999);
-        
-        // Hash du mot de passe
         const hashedPassword = await bcrypt.hash("12345678", 10);
 
-        console.log('Tentative de création assureur avec:', {
-            ASSURANCE,
-            EMAIL,
-            TELEPHONE,
-            NIF,
-            ADRESSE,
-            ICON_LOGO: iconUrl
-        });
-
-        // Création de l'assureur avec gestion d'erreur
         const datainsert = await Assureur.create({
             ASSURANCE,
             EMAIL,
             TELEPHONE,
             NIF,
             ADRESSE,
-            ID_UTILISATEUR:1,
-            // ICON_LOGO: 'null'
+            ID_UTILISATEUR: 1,
             ICON_LOGO: iconUrl,
-
         });
 
-        console.log('Assureur créé:', datainsert.toJSON());
-
         const idassureur = datainsert.toJSON().ID_ASSUREUR;
-
-        console.log('Tentative de création utilisateur avec ID_ASSURREUR:', idassureur);
-
-        // Création de l'utilisateur avec gestion d'erreur
-        const userCreated = await Users.create({
+        await Users.create({
             IDENTIFICATION: identificationCode,
             USER_NAME: EMAIL,
             TELEPHONE,
             PASSWORD: hashedPassword,
             PROFIL_ID: 1,
             STATUT: 1,
-            ID_ASSURREUR: idassureur // Vérifiez l'orthographe dans votre base de données
+            ID_ASSURREUR: idassureur,
         });
-
-        console.log('Utilisateur créé:', userCreated.toJSON());
 
         res.status(RESPONSE_CODES.CREATED).json({
             statusCode: RESPONSE_CODES.CREATED,
             httpStatus: RESPONSE_STATUS.CREATED,
             message: "Données créées avec succès",
-            result: {
-                assureur: datainsert,
-                user: userCreated
-            }
+            result: datainsert,
         });
 
     } catch (error) {
@@ -293,7 +244,7 @@ const create_assureur = async (req, res) => {
         res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
             statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
             httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
-            message: erreur,
+            message: error.message, // Correction ici
             message: "Erreur interne du serveur, réessayez plus tard",
             message:error,
             error: process.env.NODE_ENV === 'development' ? error.message : undefined

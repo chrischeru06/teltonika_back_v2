@@ -256,13 +256,14 @@ const findAll = async (req, res) => {
 
 const create_assureur = async (req, res) => {
     try {
-        console.log('Début de la fonction create_assureur');
+       
 
         const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
         const files = req.files || {};
         const { ICON_LOGO } = files;
 
         const data = { ...req.body, ...req.files };
+        return console.log(data,'les dataaaa')
         const validation = new Validation(data, {
             ASSURANCE: { required: true },
             EMAIL: { required: true },

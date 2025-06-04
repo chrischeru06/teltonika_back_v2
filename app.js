@@ -22,7 +22,12 @@ const bindUserWithRefreshToken = require("./middlewares/bindUserWithRefreshToken
 const handleSocketEvents = require("./socket");
 const requireAuth = require("./middlewares/requireAuth");
 const i18n = require("i18n");
-const { ALLOWED_ORIGINS } = require("./config/app");
+
+// ===== CONFIGURATION CORS EN PREMIER =====
+// Configuration CORS complète
+app.use(cors({
+   origin: "*",
+}));
 
 // Configuration de i18n
 i18n.configure({

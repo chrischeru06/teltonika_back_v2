@@ -6,8 +6,10 @@ module.exports = {
    BACKEND_URL: process.env.NODE_ENV == "local" ? "http://localhost:3000" : "https://apps.mediabox.bi:5031",
    ALLOWED_ORIGINS: [
       "http://localhost:8000",
-      "https://apps.mediabox.bi:5030"
-  
+      "https://apps.mediabox.bi:5031",
+      "https://devapi.mediabox.bi:22705",
+      "https://apps.mediabox.bi:22705",
+      "https://devapi.mediabox.bi:28090",
    ],
    IMAGES_MIMES: ["image/jpeg", "image/gif", "image/png"],
    /**

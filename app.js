@@ -22,12 +22,7 @@ const bindUserWithRefreshToken = require("./middlewares/bindUserWithRefreshToken
 const handleSocketEvents = require("./socket");
 const requireAuth = require("./middlewares/requireAuth");
 const i18n = require("i18n");
-
-// ===== CONFIGURATION CORS EN PREMIER =====
-// Configuration CORS complète
-app.use(cors({
-   origin: "*",
-}));
+const { ALLOWED_ORIGINS } = require("./config/app");
 
 // Configuration de i18n
 i18n.configure({
@@ -42,11 +37,11 @@ i18n.configure({
    updateFiles: false,
 });
 app.use(i18n.init);
-// app.use(
-//    cors({
-//      origin: "*",
-//    })
-//  );
+app.use(
+   cors({
+     origin: "*",
+   })
+ );
 // Configuration CORS
 // var corsOptions = {
 //    origin: function (origin, callback) {
@@ -57,8 +52,9 @@ app.use(i18n.init);
 //       }
 //    },
 // };
+
 // app.use(cors(corsOptions));
-app.use(cors({origin: "*",}));
+
 // Configuration des middlewares
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -96,7 +92,7 @@ app.all("*", (req, res) => {
 });
 
 // Configuration du serveur
-const isHttps = process.env.ENABLE_HTTPS == true;
+const isHttps = process.env.ENABLE_HTTPS == 1;
 let server;
 if (isHttps) {
    const options = {

@@ -26,28 +26,8 @@ const i18n = require("i18n");
 // ===== CONFIGURATION CORS EN PREMIER =====
 // Configuration CORS complète
 app.use(cors({
-   origin: "*", // ou spécifiez vos domaines
-   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-   allowedHeaders: [
-      "Origin", 
-      "X-Requested-With", 
-      "Content-Type", 
-      "Accept", 
-      "Authorization",
-      "Cache-Control",
-      "X-Access-Token"
-   ],
-   credentials: true,
-   optionsSuccessStatus: 200 // Pour supporter les anciens navigateurs
+   origin: "*",
 }));
-
-// Gestion explicite des requêtes OPTIONS (preflight)
-app.options('*', (req, res) => {
-   res.header('Access-Control-Allow-Origin', '*');
-   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-   res.sendStatus(200);
-});
 
 // Configuration de i18n
 i18n.configure({

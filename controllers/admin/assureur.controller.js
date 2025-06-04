@@ -12,6 +12,8 @@ const model_vehicule = require("../../models/admin/Model")
 const Users = require("../../models/admin/Users")
 const randomInt = require("../../utils/randomInt")
 const bcrypt = require("bcrypt");
+const path = require('path');
+const fs = require('fs');
 /**
  * Lister tous les demandes des courses
  * @param {express.Request} req 
@@ -151,13 +153,117 @@ const findAll = async (req, res) => {
  * @author deco257
  * @date 31/3/2025
  */
+// const create_assureur = async (req, res) => {
+//     try {
+//         const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
+//         const files = req.files || {};
+//         const { ICON_LOGO } = files;
+
+//         const data = { ...req.body, ...req.files };
+//         const validation = new Validation(data, {
+//             ASSURANCE: { required: true },
+//             EMAIL: { required: true },
+//             TELEPHONE: { required: true },
+//             NIF: { required: true },
+//             ADRESSE: { required: true },
+//         });
+
+//         await validation.run();
+//         const isValid = await validation.isValidate();
+        
+//         if (!isValid) {
+//             const errors = await validation.getErrors();
+//             console.log('Erreurs de validation:', errors);
+//             return res.status(RESPONSE_CODES.UNPROCESSABLE_ENTITY).json({
+//                 statusCode: RESPONSE_CODES.UNPROCESSABLE_ENTITY,
+//                 httpStatus: RESPONSE_STATUS.UNPROCESSABLE_ENTITY,
+//                 message: "Problème de validation des données",
+//                 result: errors,
+//             });
+//         }
+
+//         let iconUrl = null;
+//         if (ICON_LOGO) {
+//             const AssureurUpload = new Assureurpload();
+//             const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
+//             iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
+//         }
+
+//         const identificationCode = randomInt(100000, 999999);
+//         const hashedPassword = await bcrypt.hash("12345678", 10);
+
+//         const datainsert = await Assureur.create({
+//             ASSURANCE,
+//             EMAIL,
+//             TELEPHONE,
+//             NIF,
+//             ADRESSE,
+//             ID_UTILISATEUR: 1,
+//             ICON_LOGO: iconUrl,
+//         });
+
+//         const idassureur = datainsert.toJSON().ID_ASSUREUR;
+//         await Users.create({
+//             IDENTIFICATION: identificationCode,
+//             USER_NAME: EMAIL,
+//             TELEPHONE,
+//             PASSWORD: hashedPassword,
+//             PROFIL_ID: 1,
+//             STATUT: 1,
+//             ID_ASSURREUR: idassureur,
+//         });
+
+//         res.status(RESPONSE_CODES.CREATED).json({
+//             statusCode: RESPONSE_CODES.CREATED,
+//             httpStatus: RESPONSE_STATUS.CREATED,
+//             message: "Données créées avec succès",
+//             result: datainsert,
+//         });
+
+//     } catch (error) {
+//         console.error('Erreur complète:', error);
+        
+//         // Gestion spécifique des erreurs de base de données
+//         if (error.name === 'SequelizeValidationError') {
+//             return res.status(400).json({
+//                 statusCode: 400,
+//                 httpStatus: 'VALIDATION_ERROR',
+//                 message: "Erreur de validation de la base de données",
+//                 message:error,
+//                 result: error.errors
+//             });
+//         }
+
+//         if (error.name === 'SequelizeUniqueConstraintError') {
+//             return res.status(409).json({
+//                 statusCode: 409,
+//                 httpStatus: 'CONFLICT',
+//                 message: "Cette donnée existe déjà",
+//                 result: error.errors
+//             });
+//         }
+
+//         res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
+//             statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
+//             httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
+//             message: error.message, // Correction ici
+//             message: "Erreur interne du serveur, réessayez plus tard",
+//             message:error,
+//             error: process.env.NODE_ENV === 'development' ? error.message : undefined
+//         });
+//     }
+// };
+
 const create_assureur = async (req, res) => {
     try {
+       
+
         const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
         const files = req.files || {};
         const { ICON_LOGO } = files;
 
         const data = { ...req.body, ...req.files };
+        return console.log(data,'les dataaaa')
         const validation = new Validation(data, {
             ASSURANCE: { required: true },
             EMAIL: { required: true },
@@ -168,8 +274,10 @@ const create_assureur = async (req, res) => {
 
         await validation.run();
         const isValid = await validation.isValidate();
+        
         if (!isValid) {
             const errors = await validation.getErrors();
+            console.log('Erreurs de validation:', errors);
             return res.status(RESPONSE_CODES.UNPROCESSABLE_ENTITY).json({
                 statusCode: RESPONSE_CODES.UNPROCESSABLE_ENTITY,
                 httpStatus: RESPONSE_STATUS.UNPROCESSABLE_ENTITY,
@@ -180,9 +288,16 @@ const create_assureur = async (req, res) => {
 
         let iconUrl = null;
         if (ICON_LOGO) {
+            // Création du répertoire images s'il n'existe pas
+            const imagesPath = path.join(__dirname, '..', 'public', 'uploads', 'images');
+            if (!fs.existsSync(imagesPath)) {
+                fs.mkdirSync(imagesPath, { recursive: true });
+                console.log(`Répertoire créé : ${imagesPath}`);
+            }
+
             const AssureurUpload = new Assureurpload();
             const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
-            iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
+            iconUrl = `${req.protocol}://${req.get("host")}/uploads/images/${fileInfo.fileName}`;
         }
 
         const identificationCode = randomInt(100000, 999999);
@@ -209,22 +324,24 @@ const create_assureur = async (req, res) => {
             ID_ASSURREUR: idassureur,
         });
 
+        console.log('Données insérées avec succès');
         res.status(RESPONSE_CODES.CREATED).json({
             statusCode: RESPONSE_CODES.CREATED,
             httpStatus: RESPONSE_STATUS.CREATED,
             message: "Données créées avec succès",
             result: datainsert,
         });
+
     } catch (error) {
-        console.log(error);
-        res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
-            statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
-            httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
-            message: error.message, // Correction ici
-            message: "Erreur interne du serveur, réessayez plus tard",
+        console.error('Erreur complète:', error);
+        res.status(500).json({
+            statusCode: 500,
+            httpStatus: "INTERNAL_SERVER_ERROR",
+            message: error.message || "Erreur interne du serveur",
         });
     }
 };
+
 const update_assureur = async (req, res) => {
     try {
         const { ID_ASSUREUR } = req.params;

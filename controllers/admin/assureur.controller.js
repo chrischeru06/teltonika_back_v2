@@ -153,11 +153,13 @@ const findAll = async (req, res) => {
  */
 const create_assureur = async (req, res) => {
     try {
-        const {ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
+
+        const { ASSURANCE, EMAIL, TELEPHONE, NIF, ADRESSE } = req.body;
         const files = req.files || {};
-        const { ICON_LOGO } = files
-        const data = { ...req.files, ...req.body };
-        // return  console.log(data,'les data')
+        const { ICON_LOGO } = files;
+        const data = { ...req.body, ...req.files };
+    //    return console.log('Début de la fonction create_assureur',data);
+
         const validation = new Validation(data, {
             ASSURANCE: {
                 required: true
@@ -179,6 +181,7 @@ const create_assureur = async (req, res) => {
             },
         });
 
+        console.log('Validation des données en cours...');
         await validation.run();
         const isValid = await validation.isValidate();
         if (!isValid) {

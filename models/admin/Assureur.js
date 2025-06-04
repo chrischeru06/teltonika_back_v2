@@ -41,7 +41,7 @@ const Assureur = sequelize.define(
       },
       ICON_LOGO:{
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       }
       
   },

@@ -235,7 +235,7 @@ const create_assureur = async (req, res) => {
         res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
             statusCode: RESPONSE_CODES.INTERNAL_SERVER_ERROR,
             httpStatus: RESPONSE_STATUS.INTERNAL_SERVER_ERROR,
-            message: erreur,
+            message: error,
             message: "Erreur interne du serveur, réessayez plus tard",
         });
     }

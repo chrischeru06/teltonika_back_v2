@@ -193,28 +193,30 @@ const create_assureur = async (req, res) => {
                 result: errors,
             });
         }
-        let iconUrl = null;
 
-        if (ICON_LOGO) {
-            const AssureurUpload = new Assureurpload();
-            const { fileInfo } = await AssureurUpload.upload(ICON_LOGO, false);
-            // Création de l'URL du fichier
-            iconUrl = `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur}/${fileInfo.fileName}`;
-        }
-          // Generate a random identification code
-          const identificationCode = randomInt(100000, 999999); // Generates a 6-digit code
-            // Hash the password
-        const hashedPassword = await bcrypt.hash("12345678", 10); // Hashing with a salt rounds of 10
 
-        const datainsert = await Assureur.create({
+            const psr_elementUpload = new Assureurpload();
+            var filename;
+
+            if (ICON_LOGO) {
+            const { fileInfo: fileInfo_1, thumbInfo: thumbInfo_1 } =
+                await psr_elementUpload.upload(ICON_LOGO, false);
+            filename = fileInfo_1;
+            }
+         
+          const identificationCode = randomInt(100000, 999999); 
+          const hashedPassword = await bcrypt.hash("12345678", 10);
+          const datainsert = await Assureur.create({
             ASSURANCE,
             EMAIL,
             TELEPHONE,
             NIF,
             ADRESSE,
             ID_UTILISATEUR:1,
-            // ICON_LOGO: 'null'
-            ICON_LOGO: iconUrl,
+             ICON_LOGO: filename
+            ? `${req.protocol}://${req.get("host")}/${IMAGES_DESTINATIONS.assureur
+            }/${filename.fileName}`
+            : null,
 
         });
         const idassureur= datainsert.toJSON().ID_ASSUREUR 

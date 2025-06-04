@@ -33,5 +33,4 @@ class Upload {
                     }
           }
 }
-
 module.exports = Upload

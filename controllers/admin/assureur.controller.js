@@ -253,7 +253,6 @@ const findAll = async (req, res) => {
 //         });
 //     }
 // };
-
 const create_assureur = async (req, res) => {
     try {
        

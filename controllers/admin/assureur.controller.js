@@ -180,8 +180,6 @@ const create_assureur = async (req, res) => {
                 required: true,
             },
         });
-
-        console.log('Validation des données en cours...');
         await validation.run();
         const isValid = await validation.isValidate();
         if (!isValid) {

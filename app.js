@@ -94,16 +94,7 @@ app.all("*", (req, res) => {
 // Configuration du serveur
 const isHttps = process.env.ENABLE_HTTPS == 1;
 let server;
-if (isHttps) {
-   const options = {
-      key: fs.readFileSync("/var/www/html/api/https/privkey.pem"),
-      cert: fs.readFileSync("/var/www/html/api/https/fullchain.pem"),
-   };
-   server = https.createServer(options, app);
-} else {
-   server = http.createServer(app);
-}
-
+ server = http.createServer(app);
 // Configuration de Socket.IO
 const io = new Server(server, {
    cors: { origin: "*", methods: ["GET", "POST"] },
